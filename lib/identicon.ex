@@ -1,4 +1,3 @@
-require Integer
 
 defmodule Identicon do
   @moduledoc """
@@ -10,12 +9,45 @@ defmodule Identicon do
     |> pick_color
     |> build_grid
     |> filter_odd_squares
+    |> build_pixel_map
+    |> draw_image
+    |> save_image(input)
   end
 
-  def filter_odd_squares(%Identicon.Image{grid: grid} = _image) do
-    Enum.filter grid, fn({key, _value} = _pair) ->
-      Integer.is_even(key)
+  def save_image(image, name) do
+    File.write("lib/storage/#{name}.png", image)
+  end
+
+  def draw_image(%Identicon.Image{color: color, pixel_map: pixel_map}) do
+    image = :egd.create(250, 250)
+    fill = :egd.color(color)
+
+    Enum.each pixel_map, fn({top_left, bottom_right}) ->
+      :egd.filledRectangle(image, top_left, bottom_right, fill)
     end
+
+    :egd.render(image)
+  end
+
+  def build_pixel_map(%Identicon.Image{grid: grid} = image) do
+    pixel_map = Enum.map grid, fn({_key, index}) ->
+      x = rem(index, 5) * 50
+      y = div(index, 5) * 50
+
+      top_left = {x, y}
+      bottom_right = {x + 50, y + 50}
+
+      {top_left, bottom_right}
+    end
+    %Identicon.Image{image | pixel_map: pixel_map}
+  end
+
+  def filter_odd_squares(%Identicon.Image{grid: grid} = image) do
+    grid = Enum.filter grid, fn({key, _value} = _pair) ->
+      rem(key, 2) == 0
+    end
+
+    %Identicon.Image{image | grid: grid}
   end
 
   def build_grid(%Identicon.Image{hex: hex} = image) do
