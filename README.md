@@ -1,21 +1,26 @@
 # Identicon
 
-**TODO: Add description**
+An Identicon generator written in Elixir. This is a learning project following [Udemy Course](https://www.udemy.com/course/the-complete-elixir-and-phoenix-bootcamp-and-tutorial/)
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `identicon` to your list of dependencies in `mix.exs`:
+1. ```git clone``` repository
+2. Install Elixir ```brew install elixir```
+3. Run ```mix deps.get``` in ./todo-elixir
 
-```elixir
-def deps do
-  [
-    {:identicon, "~> 0.1.0"}
-  ]
-end
+## Usage
+
+1. Run ```iex -S mix``` in ./todo-elixir
+2. Run Identicon.main/1 with a string of any length
+3. You're identicon will be generated and stored in ./storage
+
+## Example Usage
+
+*In identicon-elixir directory*
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/identicon>.
+> iex -S mix
+iex(1)> Identicon.main("foo")
+:ok
+```
+foo.png will be stored in ./identicon-elixir/lib/storage
 
